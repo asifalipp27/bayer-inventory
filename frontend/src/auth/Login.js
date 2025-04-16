@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
+
+const Login = () =>{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
   const [issubmitError, setIsSubmitError] = useState(false);
+  const navigate = useNavigate();
 
   const validate = () => {
     let errors = {};
@@ -43,9 +46,10 @@ function Login() {
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
-        sessionStorage.setItem("token", data.data.token);
+        sessionStorage.setItem("token", data.token);
         setIsSubmitError(false);
         setSubmitError("");
+        navigate('/dashboard');
         })
         .catch((error) => {
             setIsSubmitError(true);
