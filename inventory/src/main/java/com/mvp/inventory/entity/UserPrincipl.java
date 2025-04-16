@@ -16,7 +16,10 @@ private final UserEntity user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(user.getRole().toUpperCase().split(","))
+                .stream()
+                .map(role -> (GrantedAuthority) () -> role)
+                .toList();
     }
 
     @Override
