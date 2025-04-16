@@ -1,0 +1,32 @@
+type Item {
+    itemId: ID!
+    itemName: String!
+    itemType: String!
+    quantity: Long!
+    threshold: Long!
+    expiryDate: String
+    createdBy: String
+    updatedBy: String
+    createdAt: String
+    updatedAt: String
+}
+
+type PagedItems {
+    content: [Item]
+    totalElements: Int
+    totalPages: Int
+    page: Int
+    size: Int
+}
+
+type Query {
+    getPagedItems(page: Int = 0, size: Int = 10): PagedItems
+    getLowStockPagedItems(page: Int = 0, size: Int = 10): PagedItems
+}
+
+type Query {
+    getItemById(itemId: ID!): Item
+    getAllItems: [Item]
+    getLowStockItems: [Item]
+    getExpiredItems: [Item]
+}
