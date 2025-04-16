@@ -4,6 +4,7 @@ import com.mvp.inventory.dto.ItemDto;
 import com.mvp.inventory.entity.ItemEntity;
 import com.mvp.inventory.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,6 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    // Define methods for item management here
-    // For example:
     @PostMapping("/add")
     public ResponseEntity<?> addItem(@RequestBody ItemDto itemDto) {
         ItemDto item = itemService.createItem(itemDto);
@@ -31,8 +30,6 @@ public class ItemController {
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
 
-    // Add more endpoints for other CRUD operations as needed
-    // For example, getItemById, updateItem, deleteItem, etc.
     @GetMapping("/items/{id}")
     public ResponseEntity<ItemDto> getItemById(@PathVariable Long id) {
         ItemDto item = itemService.getItemById(id);
@@ -62,6 +59,16 @@ public class ItemController {
     @GetMapping("/items/{page}/{size}/{sortBy}")
     public ResponseEntity<List<ItemDto>> getAllItems(@PathVariable int page, @PathVariable int size,String sortBy) {
         List<ItemDto> items = itemService.getAllItems(page, size,sortBy);
+        if (items.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(items, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/items/{text}/{page}/{size}")
+    public ResponseEntity<Page<ItemEntity>> searchItems(@PathVariable String text, @PathVariable int page, @PathVariable int size) {
+        Page<ItemEntity> items = itemService.searchItemsByTextWithPagination(text, page, size);
         if (items.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

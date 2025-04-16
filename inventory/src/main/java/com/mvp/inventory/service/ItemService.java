@@ -6,6 +6,7 @@ import com.mvp.inventory.mapper.ItemMapper;
 import com.mvp.inventory.repository.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class ItemService implements ItemServiceIn {
     public ItemDto createItem(ItemDto itemDto) {
         log.info("Creating item: {}", itemDto);
         ItemEntity entity = itemMapper.mapToEntity(itemDto);
-         itemRepository.save(entity);
-        return  itemMapper.mapToDto(entity);;
+        itemRepository.save(entity);
+        return itemMapper.mapToDto(entity);
     }
 
     @Override
@@ -45,10 +46,10 @@ public class ItemService implements ItemServiceIn {
         return itemDtos;
     }
 
-    public List<ItemDto> getAllItems(int page,int size,String sortBy) {
+    public List<ItemDto> getAllItems(int page, int size, String sortBy) {
         log.info("Fetching all items with pagination: page={}, size={}", page, size);
         Sort sort = Sort.by(sortBy).ascending();
-        PageRequest pagenation = PageRequest.of(page, size,sort);
+        PageRequest pagenation = PageRequest.of(page, size, sort);
         List<ItemEntity> itemEntities = (List<ItemEntity>) itemRepository.findAll(pagenation);
         if (itemEntities.isEmpty()) {
             log.warn("No items found");
@@ -103,7 +104,7 @@ public class ItemService implements ItemServiceIn {
         log.info("Fetching items below threshold");
         List<ItemEntity> itemEntities = itemRepository.findAll();
         if (!itemEntities.isEmpty()) {
-           List<ItemEntity> items = itemEntities.stream().filter(item -> item.getQuantity() <= item.getThreshold()).toList();
+            List<ItemEntity> items = itemEntities.stream().filter(item -> item.getQuantity() <= item.getThreshold()).toList();
             log.info("Items below threshold: {}", items.size());
             List<ItemDto> itemDtos = itemMapper.mapToDtoList(items);
             return itemDtos;
@@ -121,5 +122,11 @@ public class ItemService implements ItemServiceIn {
             return itemDtos;
         }
         return List.of();
+    }
+
+    // Paginated full-text search
+    public Page<ItemEntity> searchItemsByTextWithPagination(String searchTerm, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return itemRepository.searchByTextWithPagination(searchTerm, pageRequest);
     }
 }
