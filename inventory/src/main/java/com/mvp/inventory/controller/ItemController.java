@@ -1,8 +1,10 @@
 package com.mvp.inventory.controller;
 
 import com.mvp.inventory.dto.ItemDto;
+import com.mvp.inventory.entity.ItemEntity;
 import com.mvp.inventory.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +67,11 @@ public class ItemController {
         } else {
             return new ResponseEntity<>(items, HttpStatus.OK);
         }
+    }
+
+    @QueryMapping
+    public List<ItemDto> getExpiredItems() {
+        return itemService.getItemsBelowThreshold();
     }
 
 }
