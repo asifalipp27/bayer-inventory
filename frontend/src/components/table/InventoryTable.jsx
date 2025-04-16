@@ -6,7 +6,6 @@ import QrPopup from './qrPopup';
 const InventoryTable = (props) => {
   const {
     editInventoryItem,
-    deleteInventoryItem
   } = props
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);

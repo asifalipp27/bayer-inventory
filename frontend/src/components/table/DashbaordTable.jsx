@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,9 +21,7 @@ const schema = yup.object().shape({
 const DashboardTable = () => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
-    const [selectedItem, setSelectedItem] = useState({});
-    const [inventoryData, setInventoryData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);  
+    const [ setSelectedItem] = useState({});
     const {
       register,
       handleSubmit,
@@ -87,7 +85,7 @@ const DashboardTable = () => {
           <Button variant="primary" size="sm"  onClick={() => setShow(true)} className="add-inventory-button" >Add Inventory</Button>
         </div>
         <div>
-          {isLoading ? <div>Loading...</div> : <InventoryTable editInventoryItem={editInventoryItem} deleteInventoryItem={deleteInventoryItem} />}
+          <InventoryTable editInventoryItem={editInventoryItem} deleteInventoryItem={deleteInventoryItem} />
         </div>
         <Modal show={show} onHide={() => setShow(false)} centered>
           <Modal.Header closeButton>
