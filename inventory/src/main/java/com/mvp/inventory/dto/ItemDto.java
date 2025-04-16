@@ -15,6 +15,7 @@ public class ItemDto {
     private String itemType;
     private long quantity;
     private long threshold;
+    private Double price;
     private LocalDate expiryDate;
     private String createdBy;
     private String updatedBy;

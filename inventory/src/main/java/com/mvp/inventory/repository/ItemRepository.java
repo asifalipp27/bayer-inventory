@@ -4,6 +4,7 @@ import com.mvp.inventory.entity.ItemEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ItemRepository extends MongoRepository<ItemEntity, Long> {
     ItemEntity findByItemId(Long itemId);
@@ -21,4 +22,10 @@ public interface ItemRepository extends MongoRepository<ItemEntity, Long> {
     ItemEntity findByCreatedBy(String createdBy);
 
     ItemEntity findByUpdatedBy(String updatedBy);
+
+    // Custom finder for low stock
+    List<ItemEntity> findByQuantityLessThanEqual(long threshold);
+
+    // Finder for expired items
+    List<ItemEntity> findByExpiryDateBefore(LocalDate date);
 }

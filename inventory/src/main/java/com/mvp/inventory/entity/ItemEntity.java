@@ -21,6 +21,7 @@ public class ItemEntity {
     private long quantity;
     private long threshold;
     private LocalDate expiryDate;
+    private Double price;
     private String createdBy;
     private String updatedBy;
     private LocalDate createdAt;
